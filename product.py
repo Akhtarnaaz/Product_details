@@ -1,17 +1,9 @@
+import sys
+
 def format_product_info(product_id: str, name: str, quantity: int, price: float) -> str:
     """
     Create a human-readable summary of product details.
-
-    Args:
-        product_id (str): Unique identifier for the product.
-        name (str): Name of the product.
-        quantity (int): Quantity in stock.
-        price (float): Price per unit.
-
-    Returns:
-        str: Formatted product information.
     """
-    # Basic validation to prevent CI pipeline failures
     if quantity < 0:
         raise ValueError("Quantity cannot be negative.")
     if price < 0:
@@ -27,5 +19,14 @@ def format_product_info(product_id: str, name: str, quantity: int, price: float)
 
 
 if __name__ == "__main__":
-    # Simple test to ensure Jenkins CI runs the file without errors
-    print(format_product_info("P1001", "Sample Product", 10, 19.99))
+    # Expecting: python product.py <id> <name> <quantity> <price>
+    if len(sys.argv) != 5:
+        print("Usage: python product.py <product_id> <name> <quantity> <price>")
+        sys.exit(1)
+
+    product_id = sys.argv[1]
+    name = sys.argv[2]
+    quantity = int(sys.argv[3])
+    price = float(sys.argv[4])
+
+    print(format_product_info(product_id, name, quantity, price))
